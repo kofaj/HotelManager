@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "scJLQsOEr6g=",
+  "success": true,
+  "projectFilePath": "F:\\IT\\Zadanie\\HotelManger\\HotelManger.Console\\HotelManger.ConsoleApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lukasz\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
+    "C:\\Users\\Lukasz\\.nuget\\packages\\system.commandline.namingconventionbinder\\2.0.0-beta4.22272.1\\system.commandline.namingconventionbinder.2.0.0-beta4.22272.1.nupkg.sha512"
+  ],
+  "logs": []
+}
