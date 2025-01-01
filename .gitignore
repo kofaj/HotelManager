@@ -116,4 +116,5 @@ dist
 .pnp.*
 node_modules
 /lib
-/.vs/HotelManger
+.vs
+obj/
