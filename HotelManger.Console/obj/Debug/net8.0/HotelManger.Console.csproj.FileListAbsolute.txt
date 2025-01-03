@@ -1,4 +1,0 @@
-F:\IT\Zadanie\HotelManger\HotelManger.Console\obj\Debug\net8.0\HotelManger.Console.GeneratedMSBuildEditorConfig.editorconfig
-F:\IT\Zadanie\HotelManger\HotelManger.Console\obj\Debug\net8.0\HotelManger.Console.AssemblyInfoInputs.cache
-F:\IT\Zadanie\HotelManger\HotelManger.Console\obj\Debug\net8.0\HotelManger.Console.AssemblyInfo.cs
-F:\IT\Zadanie\HotelManger\HotelManger.Console\obj\Debug\net8.0\HotelManger.Console.csproj.CoreCompileInputs.cache
