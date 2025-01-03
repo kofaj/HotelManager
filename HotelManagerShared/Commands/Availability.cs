@@ -1,11 +1,19 @@
 ﻿using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
+using MediatR;
 
 namespace HotelManager.Shared.Commands;
 
-internal record AvailabilityCommand(string HotelId, string DateRange, string RoomType);
+public record AvailabilityCommand(string HotelId, string DateRange, string RoomType) : IRequest<Hotel>
+{
+    public static AvailabilityCommand Create(string command)
+    {
+        var parts = command.Replace(" ", "").Split(',');
+        return new AvailabilityCommand(parts[1], parts[2], parts[3]);
+    }
+};
 
-internal class AvailabilityHandler
+internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Hotel>
 {
     private readonly InMemoryHotelsRepository _repository;
 
@@ -103,5 +111,10 @@ internal class AvailabilityHandler
 
 
         throw new ArgumentException($"Date range is not recognized: {dateRange}");
+    }
+
+    public Task<Hotel> Handle(AvailabilityCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

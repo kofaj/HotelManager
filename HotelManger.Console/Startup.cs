@@ -4,9 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using HotelManager.Shared.Extensions;
-using HotelManager.Shared.Domain;
-using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;
+using HotelManager.Shared.Commands;
+using MediatR;
 
 namespace HotelManger.ConsoleApp;
 
@@ -16,9 +16,6 @@ internal static class Startup
            Host.CreateDefaultBuilder(args)
                .ConfigureServices((context, services) =>
                {
-                   // Register your services here
-                   // services.AddSingleton<IHotelBookingService, HotelBookingService>();
-                   // Add logging service
                    services.AddLogging(configure => configure.AddConsole());
                    services.RegisterSharedServices();
                });
@@ -27,9 +24,7 @@ internal static class Startup
     {
         var hotelsOption = new Option<FileInfo>("--hotels", "The path to the hotels JSON file");
         var bookingsOption = new Option<FileInfo>("--bookings", "The path to the bookings JSON file");
-        // TODO fix above option
 
-        // Create the root command
         var rootCommand = new RootCommand
             {
                 hotelsOption,
@@ -44,14 +39,14 @@ internal static class Startup
 
             await GetRequiredDataFromFiles(hotels, bookings, facade);
 
-            Console.ReadKey();
+            await ProcessUserCommands();
         });
 
         // Invoke the root command with the given args
         return await rootCommand.InvokeAsync(args);
     }
 
-    static async Task GetRequiredDataFromFiles(FileInfo hotelsFile, FileInfo bookingsFile, AddBookingsAndHotelsToRepositoriesFacade facade)
+    private static async Task GetRequiredDataFromFiles(FileInfo hotelsFile, FileInfo bookingsFile, AddBookingsAndHotelsToRepositoriesFacade facade)
     {
         if (!hotelsFile.Exists || !bookingsFile.Exists)
         {
@@ -64,5 +59,36 @@ internal static class Startup
         string bookingsContent = await File.ReadAllTextAsync(bookingsFile.FullName);
 
         facade.AddBookingsAndHotelsToRepositories(hotelsContent, bookingsContent);
+    }
+
+    private static async ValueTask ProcessUserCommands(IMediator mediator)
+    {
+        Console.WriteLine("Please enter a command or write help to get a list of available commands.");
+
+        while (true)
+        {
+            var userCommand = Console.ReadLine();
+
+            if (userCommand == null)
+            {
+                Environment.Exit(0);
+            }
+
+            if (userCommand == "help")
+            {
+                Console.WriteLine($"Available commands: {string.Join(',', AvailableCommands.GetAvailableCommands())}");
+            }
+
+            if (userCommand.StartsWith(AvailableCommands.Availability))
+            {
+                var command = AvailabilityCommand.Create(userCommand);
+                var result = await mediator.Send(command);
+            }
+
+            if (userCommand == AvailableCommands.Search.ToLower())
+            {
+
+            }
+        }
     }
 }
