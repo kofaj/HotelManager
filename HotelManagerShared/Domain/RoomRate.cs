@@ -1,6 +1,9 @@
-﻿namespace HotelManager.Shared.Domain;
+﻿using System.Text.Json.Serialization;
 
-internal enum RoomRate
+namespace HotelManager.Shared.Domain;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum RoomRate
 {
     Prepaid,
     Standard

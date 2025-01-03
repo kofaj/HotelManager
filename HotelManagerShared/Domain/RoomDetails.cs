@@ -1,6 +1,6 @@
 ﻿namespace HotelManager.Shared.Domain;
 
-internal class RoomDetails
+public class RoomDetails
 {
     /// <summary>
     /// Code representing the room type (e.g., SGL, DBL).

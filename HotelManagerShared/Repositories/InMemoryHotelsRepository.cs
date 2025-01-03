@@ -2,13 +2,13 @@
 
 namespace HotelManager.Shared.Repositories;
 
-internal class InMemoryHotelRepository
+internal class InMemoryHotelsRepository : IInMemoryRepository<Hotel>
 {
     private readonly List<Hotel> _hotels = new();
 
-    public void Add(Hotel hotel)
+    public void AddRange(IReadOnlyCollection<Hotel> hotels)
     {
-        _hotels.Add(hotel);
+        _hotels.AddRange(hotels);
     }
 
     public Hotel? GetById(string id)

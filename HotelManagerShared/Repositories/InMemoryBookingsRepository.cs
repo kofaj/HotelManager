@@ -2,13 +2,17 @@
 
 namespace HotelManager.Shared.Repositories;
 
-internal class InMemoryBookingsRepository
+internal class InMemoryBookingsRepository : IInMemoryRepository<Booking>
 {
     private readonly List<Booking> _bookings = new();
 
-    public void Add(Booking booking)
+    public void AddRange(IReadOnlyCollection<Booking> bookings)
     {
-        // for the simplicity I'll keep the same model for Domain and DB object
-        _bookings.Add(booking);
+        _bookings.AddRange(bookings);
+    }
+
+    public Booking? GetById(string id)
+    {
+        throw new NotImplementedException();
     }
 }

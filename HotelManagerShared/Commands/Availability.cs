@@ -7,9 +7,9 @@ internal record AvailabilityCommand(string HotelId, string DateRange, string Roo
 
 internal class AvailabilityHandler
 {
-    private readonly InMemoryHotelRepository _repository;
+    private readonly InMemoryHotelsRepository _repository;
 
-    public AvailabilityHandler(InMemoryHotelRepository repository)
+    public AvailabilityHandler(InMemoryHotelsRepository repository)
     {
         _repository = repository;
     }

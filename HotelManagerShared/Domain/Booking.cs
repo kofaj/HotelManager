@@ -1,6 +1,6 @@
 ﻿namespace HotelManager.Shared.Domain;
 
-internal class Booking
+public class Booking
 {
     /// <summary>
     /// Unique identifier for the hotel.
@@ -25,9 +25,9 @@ internal class Booking
     /// <summary>
     /// The rate type for the room (e.g., Prepaid, Standard).
     /// </summary>
-    public RoomType RoomRate { get; }
+    public RoomRate RoomRate { get; }
 
-    public Booking(string hotelId, DateOnly arrival, DateOnly departure, RoomType roomType, RoomType roomRate)
+    public Booking(string hotelId, DateOnly arrival, DateOnly departure, RoomType roomType, RoomRate roomRate)
     {
         HotelId = hotelId;
         Arrival = arrival;

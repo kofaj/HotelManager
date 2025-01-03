@@ -1,4 +1,6 @@
-﻿namespace HotelManager.Shared.Domain;
+﻿using System.Text.Json.Serialization;
+
+namespace HotelManager.Shared.Domain;
 
 public class Room
 {
