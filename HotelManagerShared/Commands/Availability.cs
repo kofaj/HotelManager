@@ -26,7 +26,7 @@ internal class AvailabilityHandler
         var hotel = _repository.GetById(hotelId);
 
 
-        return hotel.
+        // return hotel.
     }
 
     private void Validate(AvailabilityCommand command)

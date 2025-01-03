@@ -5461,23 +5461,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Lukasz\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Lukasz.Kowal\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\IT\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\HotelManager.Shared.UnitTests.csproj",
+      "projectUniqueName": "E:\\Coding\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\HotelManager.Shared.UnitTests.csproj",
       "projectName": "HotelManager.Shared.UnitTests",
-      "projectPath": "F:\\IT\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\HotelManager.Shared.UnitTests.csproj",
-      "packagesPath": "C:\\Users\\Lukasz\\.nuget\\packages\\",
-      "outputPath": "F:\\IT\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\obj\\",
+      "projectPath": "E:\\Coding\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\HotelManager.Shared.UnitTests.csproj",
+      "packagesPath": "C:\\Users\\Lukasz.Kowal\\.nuget\\packages\\",
+      "outputPath": "E:\\Coding\\Zadanie\\HotelManger\\Tests\\HotelManager.Shared.UnitTests\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Lukasz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lukasz.Kowal\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5485,8 +5481,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/FenergoProduct/Nebula/_packaging/nebula/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
@@ -5542,7 +5538,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
