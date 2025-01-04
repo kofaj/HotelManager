@@ -1,5 +1,6 @@
 ﻿using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
+using HotelManager.Shared.Services;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,11 +14,14 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Availa
 {
     private readonly IInMemoryRepository<Hotel> _hotelRepository;
     private readonly IInMemoryRepository<Booking> _bookingRepository;
+    private readonly IDateProvider _dateTimeProvider;
 
-    public AvailabilityHandler(IInMemoryRepository<Hotel> hotelRepository, IInMemoryRepository<Booking> bookingRepository)
+    public AvailabilityHandler(IInMemoryRepository<Hotel> hotelRepository, IInMemoryRepository<Booking> bookingRepository,
+        IDateProvider dateTimeProvider)
     {
         _hotelRepository = hotelRepository;
         _bookingRepository = bookingRepository;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     private void Validate(AvailabilityCommand command)
@@ -35,7 +39,7 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Availa
             throw new ValidationException($"Hotel with id {command.HotelId} not found");
         }
 
-        if (command.DateRange.Length == 1 && command.DateRange[0] < DateOnly.FromDateTime(DateTime.Now))
+        if (command.DateRange.Length == 1 && command.DateRange[0] < _dateTimeProvider.Today)
         {
             throw new ValidationException("Date cannot be in the past");
         }
@@ -45,7 +49,7 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Availa
             throw new ValidationException("Date range is invalid");
         }
 
-        if (command.DateRange[0] == command.DateRange[1])
+        if (command.DateRange.Length > 1 && command.DateRange[0] == command.DateRange[1])
         {
             throw new ValidationException("Dates cannot be the same");
         }

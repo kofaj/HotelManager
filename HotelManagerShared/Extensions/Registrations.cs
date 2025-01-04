@@ -18,6 +18,7 @@ public static class Registrations
         services.AddSingleton<IInMemoryRepository<Hotel>, InMemoryHotelsRepository>();
         services.AddSingleton<AddBookingsAndHotelsToRepositoriesFacade>();
         services.AddSingleton<AvailabilityCommandFactory>();
+        services.AddSingleton<IDateProvider, DateProvider>();
 
         return services;
     }

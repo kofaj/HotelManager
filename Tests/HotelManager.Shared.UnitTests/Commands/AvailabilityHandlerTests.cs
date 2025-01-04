@@ -2,6 +2,7 @@
 using HotelManager.Shared.Commands;
 using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
+using HotelManager.Shared.Services;
 using HotelManager.Shared.UnitTests.Builders;
 using Moq;
 using System.ComponentModel.DataAnnotations;
@@ -13,13 +14,17 @@ public class AvailabilityHandlerTests
     private readonly AvailabilityHandler _handler;
     private readonly Mock<IInMemoryRepository<Booking>> _bookingRepositoryMock;
     private readonly Mock<IInMemoryRepository<Hotel>> _hotelRepositoryMock;
+    private readonly Mock<IDateProvider> _dateProvider;
     private readonly RoomType RoomType = RoomType.DBL;
 
     public AvailabilityHandlerTests()
     {
         _bookingRepositoryMock = new Mock<IInMemoryRepository<Booking>>();
         _hotelRepositoryMock = new Mock<IInMemoryRepository<Hotel>>();
-        _handler = new AvailabilityHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object);
+        _dateProvider = new Mock<IDateProvider>();
+        _dateProvider.Setup(x => x.Today).Returns(DateOnly.FromDateTime(DateTime.Now));
+
+        _handler = new AvailabilityHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object, _dateProvider.Object);
     }
 
     [Fact]
@@ -27,7 +32,7 @@ public class AvailabilityHandlerTests
     {
         // Arrange
         const string hotelId = "1";
-        var dates = new DateOnly[] { new(2024, 09, 01) };
+        var dates = new DateOnly[] { (DateOnly.FromDateTime(DateTime.Now.AddDays(2))) };
 
         var hotel = AddDefaultHotelToRepository(hotelId);
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(new List<Booking>());
@@ -46,7 +51,7 @@ public class AvailabilityHandlerTests
     {
         // Arrange
         const string hotelId = "1";
-        var dates = new DateOnly[] { new(2024, 09, 01), new(2024, 09, 03) };
+        var dates = new DateOnly[] { (DateOnly.FromDateTime(DateTime.Now.AddDays(2))), (DateOnly.FromDateTime(DateTime.Now.AddDays(8))) };
         var hotel = AddDefaultHotelToRepository(hotelId);
 
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(new List<Booking>());
@@ -65,7 +70,7 @@ public class AvailabilityHandlerTests
     {
         // Arrange
         const string hotelId = "1";
-        var dates = new DateOnly[] { new(2024, 09, 01) };
+        var dates = new DateOnly[] { (DateOnly.FromDateTime(DateTime.Now.AddDays(2))) };
 
         _hotelRepositoryMock.Setup(x => x.GetById("1")).Returns((Hotel)null!);
 
@@ -77,14 +82,15 @@ public class AvailabilityHandlerTests
     }
 
     [Theory]
-    [InlineData("2024-09-03", "2024-09-03")]
-    [InlineData("2023-09-03", null)]
+    [InlineData(5, 5)]
+    [InlineData(5, null)]
+    [InlineData(-5, null)]
     [InlineData(null, null)]
-    public async Task CheckAvailabilityWhenIncorrectThenShouldThrowException(string startDate, string endDate)
+    public async Task CheckAvailabilityWhenIncorrectThenShouldThrowException(int? startDaysFromToday, int? endDaysFromToday)
     {
         // Arrange
-        var startDateOnly = startDate is not null ? DateOnly.Parse(startDate) : DateOnly.MinValue;
-        var endDateOnly = endDate is not null ? DateOnly.Parse(endDate) : DateOnly.MinValue;
+        var startDateOnly = startDaysFromToday is not null ? DateOnly.FromDateTime(DateTime.Now.AddDays(startDaysFromToday.Value)) : DateOnly.MinValue;
+        var endDateOnly = endDaysFromToday is not null ? DateOnly.FromDateTime(DateTime.Now.AddDays(endDaysFromToday!.Value)) : DateOnly.MinValue;
         var hotel = AddDefaultHotelToRepository("1");
 
         // Act
