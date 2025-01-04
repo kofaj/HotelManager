@@ -11,6 +11,9 @@ internal class InMemoryHotelsRepository : IInMemoryRepository<Hotel>
         _hotels.AddRange(hotels);
     }
 
+    public IReadOnlyCollection<Hotel> GetAll()
+        => [.. _hotels];
+
     public Hotel? GetById(string id)
         => _hotels.FirstOrDefault(x => x.Id == id);
 }

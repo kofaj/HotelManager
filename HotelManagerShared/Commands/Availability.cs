@@ -4,7 +4,7 @@ using MediatR;
 
 namespace HotelManager.Shared.Commands;
 
-public record AvailabilityCommand(string HotelId, string DateRange, string RoomType) : IRequest<Hotel>
+public record AvailabilityCommand(string HotelId, string DateRange, string RoomType) : IRequest<AvailabilityResult>
 {
     public static AvailabilityCommand Create(string command)
     {
@@ -13,31 +13,35 @@ public record AvailabilityCommand(string HotelId, string DateRange, string RoomT
     }
 };
 
-internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Hotel>
+public record AvailabilityResult(Hotel Hotel, int RoomCount);
+
+internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, AvailabilityResult>
 {
-    private readonly InMemoryHotelsRepository _repository;
+    private readonly IInMemoryRepository<Hotel> _hotelRepository;
+    private readonly IInMemoryRepository<Booking> _bookingRepository;
 
-    public AvailabilityHandler(InMemoryHotelsRepository repository)
+    public AvailabilityHandler(IInMemoryRepository<Hotel> hotelRepository, IInMemoryRepository<Booking> bookingRepository)
     {
-        _repository = repository;
+        _hotelRepository = hotelRepository;
+        _bookingRepository = bookingRepository;
     }
 
-    public void Handle(AvailabilityCommand command)
-    {
-        Validate(command);
+    //public void Handle(AvailabilityCommand command)
+    //{
+    //    Validate(command);
 
-        // we can add hotelId validation later
-        var hotelId = command.HotelId;
-        var dateRange = GetDates(command.DateRange);
-        var roomType = GetRoomType(command.RoomType);
+    //    // we can add hotelId validation later
+    //    var hotelId = command.HotelId;
+    //    var dateRange = GetDates(command.DateRange);
+    //    var roomType = GetRoomType(command.RoomType);
 
-        var hotel = _repository.GetById(hotelId);
+    //    var hotel = _repository.GetById(hotelId);
 
 
-        // return hotel.
-    }
+    //    // return hotel.
+    //}
 
-    private void Validate(AvailabilityCommand command)
+    private static void Validate(AvailabilityCommand command)
     {
         // Throwing exc is the easiest way to signalize that sth is wrong. It's ok for POC, however, later it can be replaced by the Result Type pattern
 
@@ -113,8 +117,25 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Hotel>
         throw new ArgumentException($"Date range is not recognized: {dateRange}");
     }
 
-    public Task<Hotel> Handle(AvailabilityCommand request, CancellationToken cancellationToken)
+    public async Task<AvailabilityResult> Handle(AvailabilityCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        // the program should give the availability count for the specified room type and date range
+        //  hotels sometimes accept overbookings so the value can be negative to indicate
+        // that the hotel is over capacity for that room type.
+
+        var hotel = _hotelRepository.GetById(request.HotelId);
+        // TODO check if hotel is null
+        var roomCount = hotel!.GetAvailableRoomsCount(GetRoomType(request.RoomType));
+        var bookings = _bookingRepository.GetAll(x => x.HotelId == request.HotelId);
+
+        var dateRange = GetDates(request.DateRange);
+
+        if (dateRange.Length == 1)
+        {
+            new AvailabilityResult(hotel, roomCount - (bookings.Where(w => w.IsAvailable(dateRange[0]))?.Count() ?? 0));
+        }
+
+
+        return null;
     }
 }

@@ -11,6 +11,9 @@ internal class InMemoryBookingsRepository : IInMemoryRepository<Booking>
         _bookings.AddRange(bookings);
     }
 
+    public IReadOnlyCollection<Booking> GetAll(Func<Booking, bool> predicate)
+        => _bookings.Where(predicate).ToList();
+
     public Booking? GetById(string id)
     {
         throw new NotImplementedException();

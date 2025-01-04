@@ -1,4 +1,6 @@
-﻿namespace HotelManager.Shared.Domain;
+﻿using MediatR;
+
+namespace HotelManager.Shared.Domain;
 
 public class Hotel
 {
@@ -15,12 +17,12 @@ public class Hotel
     /// <summary>
     /// List of room types available in the hotel.
     /// </summary>
-    public IReadOnlyCollection<RoomDetails> RoomTypes { get; }
+    private IReadOnlyCollection<RoomDetails> RoomTypes { get; }
 
     /// <summary>
     /// List of individual rooms in the hotel.
     /// </summary>
-    public IReadOnlyCollection<Room> Rooms { get; }
+    private IReadOnlyCollection<Room> Rooms { get; }
 
     /// <summary>
     /// Constructor to initialize all properties.
@@ -32,4 +34,7 @@ public class Hotel
         RoomTypes = roomTypes;
         Rooms = rooms;
     }
+
+    public int GetAvailableRoomsCount(RoomType roomType)
+        => Rooms.Count(r => r.RoomType == roomType);
 }

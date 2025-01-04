@@ -5,4 +5,5 @@ public interface IInMemoryRepository<TModel> where TModel : class
 {
     public void AddRange(IReadOnlyCollection<TModel> models);
     public TModel? GetById(string id);
+    public IReadOnlyCollection<TModel> GetAll(Func<TModel, bool> predicate);
 }

@@ -35,4 +35,10 @@ public class Booking
         RoomType = roomType;
         RoomRate = roomRate;
     }
+
+    public bool IsAvailable(DateOnly date)
+        => date >= Arrival && date < Departure;
+
+    public bool IsAvailable(DateOnly startDate, DateOnly endDate)
+         => startDate >= Arrival && endDate < Departure;
 }
