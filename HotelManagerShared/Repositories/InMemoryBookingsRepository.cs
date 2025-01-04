@@ -12,7 +12,7 @@ internal class InMemoryBookingsRepository : IInMemoryRepository<Booking>
     }
 
     public IReadOnlyCollection<Booking> GetAll(Func<Booking, bool> predicate)
-        => _bookings.Where(predicate).ToList();
+        => _bookings?.Where(predicate)?.ToList() ?? new List<Booking>();
 
     public Booking? GetById(string id)
     {

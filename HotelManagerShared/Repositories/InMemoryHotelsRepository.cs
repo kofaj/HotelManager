@@ -14,6 +14,9 @@ internal class InMemoryHotelsRepository : IInMemoryRepository<Hotel>
     public IReadOnlyCollection<Hotel> GetAll()
         => [.. _hotels];
 
+    public IReadOnlyCollection<Hotel> GetAll(Func<Hotel, bool> predicate)
+        => _hotels.Where(predicate).ToList();
+
     public Hotel? GetById(string id)
         => _hotels.FirstOrDefault(x => x.Id == id);
 }

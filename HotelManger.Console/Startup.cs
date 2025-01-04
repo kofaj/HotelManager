@@ -7,6 +7,7 @@ using HotelManager.Shared.Extensions;
 using HotelManager.Shared.Services;
 using HotelManager.Shared.Commands;
 using MediatR;
+using HotelManager.Shared.Factories;
 
 namespace HotelManger.ConsoleApp;
 
@@ -36,10 +37,11 @@ internal static class Startup
         rootCommand.Handler = CommandHandler.Create<FileInfo, FileInfo>(async (hotels, bookings) =>
         {
             var facade = services.GetRequiredService<AddBookingsAndHotelsToRepositoriesFacade>();
+            var mediator = services.GetRequiredService<IMediator>();
 
             await GetRequiredDataFromFiles(hotels, bookings, facade);
 
-            await ProcessUserCommands();
+            await ProcessUserCommands(mediator);
         });
 
         // Invoke the root command with the given args
@@ -81,7 +83,7 @@ internal static class Startup
 
             if (userCommand.StartsWith(AvailableCommands.Availability))
             {
-                var command = AvailabilityCommand.Create(userCommand);
+                var command = AvailabilityCommandFactory.Create(userCommand);
                 var result = await mediator.Send(command);
             }
 
