@@ -17,13 +17,13 @@ public class SearchQueryFactory
         var hotelId = parts[0];
         if (string.IsNullOrEmpty(hotelId))
         {
-            throw new ValidationException("Hotel id is empty");
+            throw new ArgumentException("Hotel id is empty");
         }
 
         var areDaysCountCorrect = int.TryParse(parts[1], out var daysCount);
         if (!areDaysCountCorrect)
         {
-            throw new ValidationException($"Days count is not recognized: {parts[1]}");
+            throw new ArgumentException($"Days count is not recognized: {parts[1]}");
         }
 
         var roomType = parts[2].GetRoomType();
