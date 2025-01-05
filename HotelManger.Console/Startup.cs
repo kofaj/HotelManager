@@ -6,8 +6,6 @@ using Microsoft.Extensions.Logging;
 using HotelManager.Shared.Extensions;
 using HotelManager.Shared.Services;
 using MediatR;
-using HotelManager.Shared.Factories;
-using HotelManger.ConsoleApp.Extensions;
 using HotelManger.ConsoleApp.Queries;
 using HotelManager.Shared;
 

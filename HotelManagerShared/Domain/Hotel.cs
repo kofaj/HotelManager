@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace HotelManager.Shared.Domain;
+﻿namespace HotelManager.Shared.Domain;
 
 public class Hotel
 {
@@ -33,6 +31,14 @@ public class Hotel
         Name = name;
         RoomTypes = roomTypes;
         Rooms = rooms;
+    }
+
+    /// <summary>
+    /// Constructor for System.Text.Json.
+    /// </summary>
+    public Hotel()
+    {
+
     }
 
     public int GetAvailableRoomsCount(RoomType roomType)
