@@ -5,27 +5,27 @@ public class RoomDetails
     /// <summary>
     /// Code representing the room type (e.g., SGL, DBL).
     /// </summary>
-    public string Code { get; }
+    public string Code { get; set; }
 
     /// <summary>
     /// Description of the room type.
     /// </summary>
-    public string Description { get; }
+    public string Description { get; set; }
 
     /// <summary>
     /// List of amenities provided with this room type.
     /// </summary>
-    public IReadOnlyCollection<string> Amenities { get; }
+    public List<string> Amenities { get; set; }
 
     /// <summary>
     /// List of special features for this room type.
     /// </summary>
-    public IReadOnlyCollection<string> Features { get; }
+    public List<string> Features { get; set; }
 
     /// <summary>
     /// Constructor to initialize all properties.
     /// </summary>
-    public RoomDetails(string code, string description, IReadOnlyCollection<string> amenities, IReadOnlyCollection<string> features)
+    public RoomDetails(string code, string description, List<string> amenities, List<string> features)
     {
         Code = code;
         Description = description;

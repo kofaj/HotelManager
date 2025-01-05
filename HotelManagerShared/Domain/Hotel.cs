@@ -15,12 +15,12 @@ public class Hotel
     /// <summary>
     /// List of room types available in the hotel.
     /// </summary>
-    private IReadOnlyCollection<RoomDetails> RoomTypes { get; }
+    public IReadOnlyCollection<RoomDetails> RoomTypes { get; }
 
     /// <summary>
     /// List of individual rooms in the hotel.
     /// </summary>
-    private IReadOnlyCollection<Room> Rooms { get; }
+    public IReadOnlyCollection<Room> Rooms { get; }
 
     /// <summary>
     /// Constructor to initialize all properties.
@@ -31,14 +31,6 @@ public class Hotel
         Name = name;
         RoomTypes = roomTypes;
         Rooms = rooms;
-    }
-
-    /// <summary>
-    /// Constructor for System.Text.Json.
-    /// </summary>
-    public Hotel()
-    {
-
     }
 
     public int GetAvailableRoomsCount(RoomType roomType)

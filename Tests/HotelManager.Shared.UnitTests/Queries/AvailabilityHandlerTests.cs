@@ -86,7 +86,7 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.RoomCount.Should().Be(2);
+        result.RoomCount.Should().Be(12);
     }
 
     [Fact]

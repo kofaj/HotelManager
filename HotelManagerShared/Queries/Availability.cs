@@ -59,14 +59,36 @@ internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, Ava
     {
         Validate(request);
 
-        var hotel = _hotelRepository.GetById(request.HotelId);
-        var roomCount = hotel!.GetAvailableRoomsCount(request.RoomType);
+        var hotel = _hotelRepository.GetById(request.HotelId) ?? throw new ArgumentException($"Hotel with ID {request.HotelId} not found.");
         var bookings = _bookingRepository.GetAll(x => x.HotelId == request.HotelId);
 
-        var resultRoomCount = roomCount - (request.DateRange.Length == 1
-            ? bookings.Count(w => w.IsAvailable(request.DateRange[0]))
-            : bookings.Count(w => w.IsAvailable(request.DateRange[0], request.DateRange[1])));
+        int resultRoomCount;
+
+        if (request.DateRange.Length == 1)
+        {
+            // Single date: calculate availability for one day
+            var date = request.DateRange[0];
+            var roomCount = hotel.GetAvailableRoomsCount(request.RoomType);
+            var bookedCount = bookings.Count(w => w.IsAvailable(date));
+            resultRoomCount = roomCount - bookedCount;
+        }
+        else
+        {
+            // Date range: sum available rooms across the range
+            var startDate = request.DateRange[0];
+            var endDate = request.DateRange[1];
+
+            resultRoomCount = 0;
+
+            for (var date = startDate; date < endDate; date = date.AddDays(1))
+            {
+                var roomCount = hotel.GetAvailableRoomsCount(request.RoomType);
+                var bookedCount = bookings.Count(w => w.IsAvailable(date));
+                resultRoomCount += roomCount - bookedCount;
+            }
+        }
 
         return new AvailabilityResult(resultRoomCount);
     }
+
 }

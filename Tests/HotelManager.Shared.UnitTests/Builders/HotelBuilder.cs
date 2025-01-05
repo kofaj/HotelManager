@@ -46,7 +46,7 @@ internal class HotelBuilder
     }
 
     public Hotel Build()
-        => new(_id, _name, _roomTypes.AsReadOnly(), _rooms.AsReadOnly());
+        => new(_id, _name, _roomTypes, _rooms);
 
     public static HotelBuilder Init()
         => new();
