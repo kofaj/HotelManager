@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManger.ConsoleApp", "HotelManger.Console\HotelManger.ConsoleApp.csproj", "{9A804F95-06BB-4CF4-946E-46EE956281F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManger.ConsoleApp", "HotelManger.Console\HotelManger.ConsoleApp.csproj", "{9A804F95-06BB-4CF4-946E-46EE956281F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManager.Shared", "HotelManagerShared\HotelManager.Shared.csproj", "{6102293F-05DB-4F13-A429-2327B1F16301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManager.Shared", "HotelManagerShared\HotelManager.Shared.csproj", "{6102293F-05DB-4F13-A429-2327B1F16301}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4EA05FF5-1B55-48C3-B2B9-C300330BDADF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManager.Shared.UnitTests", "Tests\HotelManager.Shared.UnitTests\HotelManager.Shared.UnitTests.csproj", "{0F5454AC-4728-4967-915A-10DC8122B7BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManager.Shared.UnitTests", "Tests\HotelManager.Shared.UnitTests\HotelManager.Shared.UnitTests.csproj", "{0F5454AC-4728-4967-915A-10DC8122B7BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

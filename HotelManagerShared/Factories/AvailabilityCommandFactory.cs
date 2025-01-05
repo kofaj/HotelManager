@@ -5,7 +5,7 @@ namespace HotelManager.Shared.Factories;
 
 public class AvailabilityCommandFactory
 {
-    public static AvailabilityCommand Create(string command)
+    public static AvailabilityQuery Create(string command)
     {
         var parts = command.Replace(" ", "").Split(',');
         if (parts.Length != 3)
@@ -17,7 +17,7 @@ public class AvailabilityCommandFactory
         var dateRange = GetDates(parts[1]);
         var roomType = GetRoomType(parts[2]);
 
-        return new AvailabilityCommand(hotelId, dateRange, roomType);
+        return new AvailabilityQuery(hotelId, dateRange, roomType);
     }
 
     private static RoomType GetRoomType(string roomType)

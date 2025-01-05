@@ -6,17 +6,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HotelManager.Shared.Commands;
 
-public record AvailabilityCommand(string HotelId, DateOnly[] DateRange, RoomType RoomType) : IRequest<AvailabilityResult>;
+public record AvailabilityQuery(string HotelId, DateOnly[] DateRange, RoomType RoomType) : IRequest<AvailabilityResult>;
 
 public record AvailabilityResult(Hotel Hotel, int RoomCount);
 
-internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, AvailabilityResult>
+internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, AvailabilityResult>
 {
     private readonly IInMemoryRepository<Hotel> _hotelRepository;
     private readonly IInMemoryRepository<Booking> _bookingRepository;
     private readonly IDateProvider _dateTimeProvider;
 
-    public AvailabilityHandler(IInMemoryRepository<Hotel> hotelRepository, IInMemoryRepository<Booking> bookingRepository,
+    public AvailabilityQueryHandler(IInMemoryRepository<Hotel> hotelRepository, IInMemoryRepository<Booking> bookingRepository,
         IDateProvider dateTimeProvider)
     {
         _hotelRepository = hotelRepository;
@@ -24,7 +24,7 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Availa
         _dateTimeProvider = dateTimeProvider;
     }
 
-    private void Validate(AvailabilityCommand command)
+    private void Validate(AvailabilityQuery command)
     {
         // Throwing exc is the easiest way to signalize that sth is wrong. It's ok for POC, however, later it can be replaced by the Result Type pattern
 
@@ -55,7 +55,7 @@ internal class AvailabilityHandler : IRequestHandler<AvailabilityCommand, Availa
         }
     }
 
-    public async Task<AvailabilityResult> Handle(AvailabilityCommand request, CancellationToken cancellationToken)
+    public async Task<AvailabilityResult> Handle(AvailabilityQuery request, CancellationToken cancellationToken)
     {
         Validate(request);
 

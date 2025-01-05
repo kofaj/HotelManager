@@ -11,7 +11,7 @@ namespace HotelManager.Shared.UnitTests.Commands;
 
 public class AvailabilityHandlerTests
 {
-    private readonly AvailabilityHandler _handler;
+    private readonly AvailabilityQueryHandler _handler;
     private readonly Mock<IInMemoryRepository<Booking>> _bookingRepositoryMock;
     private readonly Mock<IInMemoryRepository<Hotel>> _hotelRepositoryMock;
     private readonly Mock<IDateProvider> _dateProvider;
@@ -24,7 +24,7 @@ public class AvailabilityHandlerTests
         _dateProvider = new Mock<IDateProvider>();
         _dateProvider.Setup(x => x.Today).Returns(DateOnly.FromDateTime(DateTime.Now));
 
-        _handler = new AvailabilityHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object, _dateProvider.Object);
+        _handler = new AvailabilityQueryHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object, _dateProvider.Object);
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class AvailabilityHandlerTests
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(new List<Booking>());
 
         // Act
-        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+        var result = await _handler.Handle(new AvailabilityQuery(hotelId, dates, RoomType), default);
 
         // Assert
         result.Should().NotBeNull();
@@ -65,7 +65,7 @@ public class AvailabilityHandlerTests
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(bookings);
 
         // Act
-        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+        var result = await _handler.Handle(new AvailabilityQuery(hotelId, dates, RoomType), default);
 
         // Assert
         result.Should().NotBeNull();
@@ -84,7 +84,7 @@ public class AvailabilityHandlerTests
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(new List<Booking>());
 
         // Act
-        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+        var result = await _handler.Handle(new AvailabilityQuery(hotelId, dates, RoomType), default);
 
         // Assert
         result.Should().NotBeNull();
@@ -102,7 +102,7 @@ public class AvailabilityHandlerTests
         _hotelRepositoryMock.Setup(x => x.GetById("1")).Returns((Hotel)null!);
 
         // Act
-        Func<Task> act = async () => await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+        Func<Task> act = async () => await _handler.Handle(new AvailabilityQuery(hotelId, dates, RoomType), default);
 
         // Assert
         await act.Should().ThrowAsync<ValidationException>();
@@ -121,7 +121,7 @@ public class AvailabilityHandlerTests
         var hotel = AddDefaultHotelToRepository("1");
 
         // Act
-        Func<Task> act = async () => await _handler.Handle(new AvailabilityCommand(hotel.Id, [startDateOnly, endDateOnly], RoomType), default);
+        Func<Task> act = async () => await _handler.Handle(new AvailabilityQuery(hotel.Id, [startDateOnly, endDateOnly], RoomType), default);
 
         // Assert
         await act.Should().ThrowAsync<ValidationException>();
@@ -158,7 +158,7 @@ public class AvailabilityHandlerTests
         _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(bookings);
 
         // Act
-        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+        var result = await _handler.Handle(new AvailabilityQuery(hotelId, dates, RoomType), default);
 
         // Assert
         result.Should().NotBeNull();
