@@ -47,6 +47,33 @@ public class AvailabilityHandlerTests
     }
 
     [Fact]
+    public async Task CheckAvailabilityWhenDateIsSingleAndThereIsOneBookingsShouldReturnRoomsCount()
+    {
+        // Arrange
+        const string hotelId = "1";
+        var dates = new DateOnly[] { (DateOnly.FromDateTime(DateTime.Now.AddDays(2))) };
+
+        var hotel = AddDefaultHotelToRepository(hotelId);
+        var bookings = BookingBuilder.BuildAsList(
+            BookingBuilder.Init()
+            .WithHotelId(hotelId)
+            .WithArrival(DateOnly.FromDateTime(DateTime.Now.AddDays(1)))
+            .WithDeparture(DateOnly.FromDateTime(DateTime.Now.AddDays(3)))
+            .WithRoomType(RoomType)
+            .Build());
+
+        _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(bookings);
+
+        // Act
+        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Hotel.Id.Should().Be(hotel.Id);
+        result.RoomCount.Should().Be(1);
+    }
+
+    [Fact]
     public async Task CheckAvailabilityWhenMultiDateAndThereIsNoBookingsShouldReturnAllRoomsCount()
     {
         // Arrange
@@ -98,6 +125,45 @@ public class AvailabilityHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<ValidationException>();
+    }
+
+    [Fact]
+    public async Task CheckAvailabilityWhenDateIsSingleAndThereIsOverbookingShouldReturnNegativeCount()
+    {
+        // Arrange
+        const string hotelId = "1";
+        var dates = new DateOnly[] { (DateOnly.FromDateTime(DateTime.Now.AddDays(2))) };
+
+        var hotel = AddDefaultHotelToRepository(hotelId);
+        var bookings = BookingBuilder.BuildAsList(
+           BookingBuilder.Init()
+           .WithHotelId(hotelId)
+           .WithArrival(DateOnly.FromDateTime(DateTime.Now.AddDays(1)))
+           .WithDeparture(DateOnly.FromDateTime(DateTime.Now.AddDays(3)))
+           .WithRoomType(RoomType)
+           .Build(),
+           BookingBuilder.Init()
+           .WithHotelId(hotelId)
+           .WithArrival(DateOnly.FromDateTime(DateTime.Now.AddDays(1)))
+           .WithDeparture(DateOnly.FromDateTime(DateTime.Now.AddDays(3)))
+           .WithRoomType(RoomType)
+           .Build(),
+            BookingBuilder.Init()
+           .WithHotelId(hotelId)
+           .WithArrival(DateOnly.FromDateTime(DateTime.Now.AddDays(1)))
+           .WithDeparture(DateOnly.FromDateTime(DateTime.Now.AddDays(3)))
+           .WithRoomType(RoomType)
+           .Build());
+
+        _bookingRepositoryMock.Setup(x => x.GetAll(It.IsAny<Func<Booking, bool>>())).Returns(bookings);
+
+        // Act
+        var result = await _handler.Handle(new AvailabilityCommand(hotelId, dates, RoomType), default);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Hotel.Id.Should().Be(hotel.Id);
+        result.RoomCount.Should().Be(-1);
     }
 
     private Hotel AddDefaultHotelToRepository(string hotelId)
