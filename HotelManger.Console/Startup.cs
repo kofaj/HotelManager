@@ -41,7 +41,16 @@ internal static class Startup
 
             await GetRequiredDataFromFiles(hotels, bookings, facade);
 
-            await ProcessUserCommands(mediator);
+            try
+            {
+                await ProcessUserCommands(mediator);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         });
 
         // Invoke the root command with the given args
