@@ -1,9 +1,10 @@
-﻿using HotelManager.Shared.Commands;
-using HotelManager.Shared.Domain;
+﻿using HotelManager.Shared.Query;
+using HotelManager.Shared.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelManager.Shared.Factories;
 
-public class AvailabilityCommandFactory
+public static class AvailabilityQueryFactory
 {
     public static AvailabilityQuery Create(string command)
     {
@@ -14,21 +15,15 @@ public class AvailabilityCommandFactory
         }
 
         var hotelId = parts[0];
-        var dateRange = GetDates(parts[1]);
-        var roomType = GetRoomType(parts[2]);
-
-        return new AvailabilityQuery(hotelId, dateRange, roomType);
-    }
-
-    private static RoomType GetRoomType(string roomType)
-    {
-        var parseResult = Enum.TryParse<RoomType>(roomType, out var result);
-        if (!parseResult)
+        if (string.IsNullOrEmpty(hotelId))
         {
-            throw new ArgumentException($"Room Type is not recognized: {roomType}");
+            throw new ValidationException("Hotel id is empty");
         }
 
-        return result;
+        var dateRange = GetDates(parts[1]);
+        var roomType = parts[2].GetRoomType();
+
+        return new AvailabilityQuery(hotelId, dateRange, roomType);
     }
 
     private static DateOnly[] GetDates(string dateRange)

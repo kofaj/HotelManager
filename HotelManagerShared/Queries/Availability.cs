@@ -4,11 +4,11 @@ using HotelManager.Shared.Services;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace HotelManager.Shared.Commands;
+namespace HotelManager.Shared.Query;
 
 public record AvailabilityQuery(string HotelId, DateOnly[] DateRange, RoomType RoomType) : IRequest<AvailabilityResult>;
+public record AvailabilityResult(int RoomCount);
 
-public record AvailabilityResult(Hotel Hotel, int RoomCount);
 
 internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, AvailabilityResult>
 {
@@ -67,6 +67,6 @@ internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, Ava
             ? bookings.Count(w => w.IsAvailable(request.DateRange[0]))
             : bookings.Count(w => w.IsAvailable(request.DateRange[0], request.DateRange[1])));
 
-        return new AvailabilityResult(hotel, resultRoomCount);
+        return new AvailabilityResult(resultRoomCount);
     }
 }

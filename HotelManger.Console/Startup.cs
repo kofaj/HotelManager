@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using HotelManager.Shared.Extensions;
 using HotelManager.Shared.Services;
-using HotelManager.Shared.Commands;
 using MediatR;
 using HotelManager.Shared.Factories;
+using HotelManger.ConsoleApp.Extensions;
+using HotelManger.ConsoleApp.Queries;
+using HotelManager.Shared;
 
 namespace HotelManger.ConsoleApp;
 
@@ -32,7 +34,7 @@ internal static class Startup
                 bookingsOption,
             };
 
-        rootCommand.Description = "MyApp: A tool for handling hotels and bookings.";
+        rootCommand.Description = "HotelManager: A tool for handling hotels and bookings.";
 
         rootCommand.Handler = CommandHandler.Create<FileInfo, FileInfo>(async (hotels, bookings) =>
         {
@@ -69,27 +71,29 @@ internal static class Startup
 
         while (true)
         {
-            var userCommand = Console.ReadLine();
+            var userQuery = Console.ReadLine();
 
-            if (userCommand == null)
+            if (userQuery == null)
             {
                 Environment.Exit(0);
             }
 
-            if (userCommand == "help")
+            if (userQuery == "help")
             {
-                Console.WriteLine($"Available commands: {string.Join(',', AvailableCommands.GetAvailableCommands())}");
+                Console.WriteLine($"Available commands: {string.Join(',', AvailableQueries.GetAvailableCommands())}");
             }
 
-            if (userCommand.StartsWith(AvailableCommands.Availability))
+            if (userQuery.StartsWith(AvailableQueries.Availability))
             {
-                var command = AvailabilityCommandFactory.Create(userCommand);
-                var result = await mediator.Send(command);
+                await AvailabilityQuery.RunQuery(userQuery, mediator);
             }
-
-            if (userCommand == AvailableCommands.Search.ToLower())
+            else if (userQuery.StartsWith(AvailableQueries.Search))
             {
-
+                await SearchQuery.RunQuery(userQuery, mediator);
+            }
+            else
+            {
+                Console.WriteLine("Invalid command. Please try again.");
             }
         }
     }

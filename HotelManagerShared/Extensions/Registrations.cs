@@ -1,4 +1,4 @@
-﻿using HotelManager.Shared.Commands;
+﻿using HotelManager.Shared.Query;
 using HotelManager.Shared.Domain;
 using HotelManager.Shared.Factories;
 using HotelManager.Shared.Repositories;
@@ -17,7 +17,6 @@ public static class Registrations
         services.AddSingleton<IInMemoryRepository<Booking>, InMemoryBookingsRepository>();
         services.AddSingleton<IInMemoryRepository<Hotel>, InMemoryHotelsRepository>();
         services.AddSingleton<AddBookingsAndHotelsToRepositoriesFacade>();
-        services.AddSingleton<AvailabilityCommandFactory>();
         services.AddSingleton<IDateProvider, DateProvider>();
 
         return services;

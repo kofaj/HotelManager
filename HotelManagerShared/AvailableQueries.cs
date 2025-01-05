@@ -1,6 +1,6 @@
-﻿namespace HotelManager.Shared.Commands;
+﻿namespace HotelManager.Shared;
 
-public static class AvailableCommands
+public static class AvailableQueries
 {
     public static IReadOnlyCollection<string> GetAvailableCommands()
         => [Availability, Search];

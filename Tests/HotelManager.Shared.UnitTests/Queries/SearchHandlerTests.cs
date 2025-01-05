@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using HotelManager.Shared.Commands;
+using HotelManager.Shared.Query;
 using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;

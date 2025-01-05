@@ -3,7 +3,7 @@ using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;
 using MediatR;
 
-namespace HotelManager.Shared.Commands;
+namespace HotelManager.Shared.Query;
 
 public record SearchQuery(string HotelId, int Days, RoomType RoomType) : IRequest<SearchQueryResponse>;
 
@@ -26,7 +26,6 @@ public class SearchQueryResponseDetails(DateOnly AvaliableFrom, DateOnly Availab
         return false;
     }
 }
-
 
 // During testing I found one case, where I was not sure if it's valid or not - Is it possible to run this query with 0 days?
 internal class SearchQueryHandler : IRequestHandler<SearchQuery, SearchQueryResponse>

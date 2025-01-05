@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using HotelManager.Shared.Commands;
+using HotelManager.Shared.Query;
 using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;
@@ -42,7 +42,6 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Hotel.Id.Should().Be(hotel.Id);
         result.RoomCount.Should().Be(2);
     }
 
@@ -69,7 +68,6 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Hotel.Id.Should().Be(hotel.Id);
         result.RoomCount.Should().Be(1);
     }
 
@@ -88,7 +86,6 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Hotel.Id.Should().Be(hotel.Id);
         result.RoomCount.Should().Be(2);
     }
 
@@ -162,7 +159,6 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Hotel.Id.Should().Be(hotel.Id);
         result.RoomCount.Should().Be(-1);
     }
 
