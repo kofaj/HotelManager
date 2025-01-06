@@ -1,14 +1,13 @@
-﻿using HotelManager.Shared.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+using HotelManager.Shared.Domain;
 using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
-namespace HotelManager.Shared.Query;
+namespace HotelManager.Shared.Queries;
 
 public record AvailabilityQuery(string HotelId, DateOnly[] DateRange, RoomType RoomType) : IRequest<AvailabilityResult>;
 public record AvailabilityResult(int RoomCount);
-
 
 internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, AvailabilityResult>
 {
@@ -27,11 +26,7 @@ internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, Ava
     private void Validate(AvailabilityQuery command)
     {
         // Throwing exc is the easiest way to signalize that sth is wrong. It's ok for POC, however, later it can be replaced by the Result Type pattern
-
-        if (command is null)
-        {
-            throw new ArgumentNullException(nameof(command));
-        }
+        ArgumentNullException.ThrowIfNull(command);
 
         var hotel = _hotelRepository.GetById(command.HotelId);
         if (hotel is null)
@@ -39,19 +34,14 @@ internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, Ava
             throw new ValidationException($"Hotel with id {command.HotelId} not found");
         }
 
-        if (command.DateRange.Length == 1 && command.DateRange[0] < _dateTimeProvider.Today)
+        switch (command.DateRange.Length)
         {
-            throw new ValidationException("Date cannot be in the past");
-        }
-
-        if (command.DateRange.Length == 2 && command.DateRange[0] > command.DateRange[1])
-        {
-            throw new ValidationException("Date range is invalid");
-        }
-
-        if (command.DateRange.Length > 1 && command.DateRange[0] == command.DateRange[1])
-        {
-            throw new ValidationException("Dates cannot be the same");
+            case 1 when command.DateRange[0] < _dateTimeProvider.Today:
+                throw new ValidationException("Date cannot be in the past");
+            case 2 when command.DateRange[0] > command.DateRange[1]:
+                throw new ValidationException("Date range is invalid");
+            case > 1 when command.DateRange[0] == command.DateRange[1]:
+                throw new ValidationException("Dates cannot be the same");
         }
     }
 
@@ -60,35 +50,13 @@ internal class AvailabilityQueryHandler : IRequestHandler<AvailabilityQuery, Ava
         Validate(request);
 
         var hotel = _hotelRepository.GetById(request.HotelId) ?? throw new ArgumentException($"Hotel with ID {request.HotelId} not found.");
+        var roomCount = hotel!.GetAvailableRoomsCount(request.RoomType);
         var bookings = _bookingRepository.GetAll(x => x.HotelId == request.HotelId);
 
-        int resultRoomCount;
-
-        if (request.DateRange.Length == 1)
-        {
-            // Single date: calculate availability for one day
-            var date = request.DateRange[0];
-            var roomCount = hotel.GetAvailableRoomsCount(request.RoomType);
-            var bookedCount = bookings.Count(w => w.IsAvailable(date));
-            resultRoomCount = roomCount - bookedCount;
-        }
-        else
-        {
-            // Date range: sum available rooms across the range
-            var startDate = request.DateRange[0];
-            var endDate = request.DateRange[1];
-
-            resultRoomCount = 0;
-
-            for (var date = startDate; date < endDate; date = date.AddDays(1))
-            {
-                var roomCount = hotel.GetAvailableRoomsCount(request.RoomType);
-                var bookedCount = bookings.Count(w => w.IsAvailable(date));
-                resultRoomCount += roomCount - bookedCount;
-            }
-        }
+        var resultRoomCount = roomCount - (request.DateRange.Length == 1
+            ? bookings.Count(w => w.IsAvailable(request.DateRange[0]))
+            : bookings.Count(w => w.IsAvailable(request.DateRange[0], request.DateRange[1])));
 
         return new AvailabilityResult(resultRoomCount);
     }
-
 }

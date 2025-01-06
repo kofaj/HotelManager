@@ -11,9 +11,6 @@ internal class InMemoryHotelsRepository : IInMemoryRepository<Hotel>
         _hotels.AddRange(hotels);
     }
 
-    public IReadOnlyCollection<Hotel> GetAll()
-        => [.. _hotels];
-
     public IReadOnlyCollection<Hotel> GetAll(Func<Hotel, bool> predicate)
         => _hotels.Where(predicate).ToList();
 

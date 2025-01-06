@@ -15,7 +15,5 @@ internal class InMemoryBookingsRepository : IInMemoryRepository<Booking>
         => _bookings?.Where(predicate)?.ToList() ?? new List<Booking>();
 
     public Booking? GetById(string id)
-    {
-        throw new NotImplementedException();
-    }
+        => _bookings.FirstOrDefault(x => x.HotelId == id);
 }

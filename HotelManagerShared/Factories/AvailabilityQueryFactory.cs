@@ -1,13 +1,11 @@
-﻿using HotelManager.Shared.Query;
-using HotelManager.Shared.Extensions;
-using System.ComponentModel.DataAnnotations;
+﻿using HotelManager.Shared.Extensions;
+using HotelManager.Shared.Queries;
+using HotelManager.Shared.Services.JsonConverters;
 
 namespace HotelManager.Shared.Factories;
 
 public static class AvailabilityQueryFactory
 {
-    private const string DateFormat = "yyyyMMdd";
-
     public static AvailabilityQuery Create(string command)
     {
         var parts = command.Replace(" ", "").Split(',');
@@ -30,42 +28,45 @@ public static class AvailabilityQueryFactory
 
     private static DateOnly[] GetDates(string dateRange)
     {
-        if (dateRange.Length == 8)
+        switch (dateRange.Length)
         {
-            var singleResult = DateOnly.TryParseExact(dateRange, DateFormat, out var result);
-            if (!singleResult)
+            case 8:
             {
-                throw new ArgumentException($"Date is not recognized: {dateRange}");
-            }
+                var singleResult =
+                    DateOnly.TryParseExact(dateRange, DateOnlyConverter.SerializationFormat, out var result);
+                if (!singleResult)
+                {
+                    throw new ArgumentException($"Date is not recognized: {dateRange}");
+                }
 
-            return [result];
+                return [result];
+            }
+            case 17:
+            {
+                var isRightSeparator = dateRange[8] == '-';
+                if (!isRightSeparator)
+                {
+                    throw new ArgumentException($"Date Range separator is not recognized: {dateRange[8]}");
+                }
+
+                var firstDateResult = DateOnly.TryParseExact(dateRange[..8], DateOnlyConverter.SerializationFormat,
+                    out var firstDate);
+                if (!firstDateResult)
+                {
+                    throw new ArgumentException($"Date is not recognized: {dateRange[..8]}");
+                }
+
+                var lastDateResult = DateOnly.TryParseExact(dateRange[9..], DateOnlyConverter.SerializationFormat,
+                    out var lastDate);
+                if (!lastDateResult)
+                {
+                    throw new ArgumentException($"Date is not recognized: {dateRange[9..]}");
+                }
+
+                return [firstDate, lastDate];
+            }
+            default:
+                throw new ArgumentException($"Date range is not recognized: {dateRange}");
         }
-
-        if (dateRange.Length == 17)
-        {
-            var isRightSeparator = dateRange[8] == '-';
-            if (!isRightSeparator)
-            {
-                throw new ArgumentException($"Date Range separator is not recognized: {dateRange[8]}");
-            }
-
-            var firstDateResult = DateOnly.TryParseExact(dateRange[..8], DateFormat, out var firstDate);
-            if (!firstDateResult)
-            {
-                throw new ArgumentException($"Date is not recognized: {dateRange[..8]}");
-            }
-
-            var lastDateResult = DateOnly.TryParseExact(dateRange[9..], DateFormat, out var lastDate);
-            if (!lastDateResult)
-            {
-                throw new ArgumentException($"Date is not recognized: {dateRange[9..]}");
-            }
-
-            return [firstDate, lastDate];
-        }
-
-
-        throw new ArgumentException($"Date range is not recognized: {dateRange}");
     }
-
 }

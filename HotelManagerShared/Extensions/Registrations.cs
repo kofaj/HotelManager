@@ -1,6 +1,5 @@
-﻿using HotelManager.Shared.Query;
-using HotelManager.Shared.Domain;
-using HotelManager.Shared.Factories;
+﻿using HotelManager.Shared.Domain;
+using HotelManager.Shared.Queries;
 using HotelManager.Shared.Repositories;
 using HotelManager.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;

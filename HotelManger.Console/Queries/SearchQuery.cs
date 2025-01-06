@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HotelManger.ConsoleApp.Queries;
 
-internal class SearchQuery
+internal static class SearchQuery
 {
     public static async Task RunQuery(string userInput, IMediator mediator)
     {
@@ -22,16 +22,16 @@ internal class SearchQuery
         var sb = new StringBuilder();
         foreach (var availability in result.RoomsAvailability)
         {
-            if (availability.AvaliableFrom == availability.AvailableTo)
+            if (availability.AvailableFrom == availability.AvailableTo)
             {
-                sb.AppendLine($"({availability.AvaliableFrom.ConvertDateToString()}, {availability.RoomCount}), ");
+                sb.AppendLine($"({availability.AvailableFrom.ConvertDateToString()}, {availability.RoomCount}), ");
             }
             else
             {
-                sb.AppendLine($"({availability.AvaliableFrom.ConvertDateToString()}-{availability.AvailableTo.ConvertDateToString()}, {availability.RoomCount}), ");
+                sb.AppendLine($"({availability.AvailableFrom.ConvertDateToString()}-{availability.AvailableTo.ConvertDateToString()}, {availability.RoomCount}), ");
             }
         }
 
-        Console.WriteLine(sb.ToString().TrimEnd(new char[] { ',', ' ' }));
+        Console.WriteLine(sb.ToString().TrimEnd(',', ' '));
     }
 }

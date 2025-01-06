@@ -41,16 +41,7 @@ internal static class Startup
 
             await GetRequiredDataFromFiles(hotels, bookings, facade);
 
-            try
-            {
-                await ProcessUserCommands(mediator);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            await ProcessUserCommands(mediator);
         });
 
         // Invoke the root command with the given args
@@ -66,8 +57,8 @@ internal static class Startup
         }
 
         // In real-case scenarios I would add CT to the following calls
-        string hotelsContent = await File.ReadAllTextAsync(hotelsFile.FullName);
-        string bookingsContent = await File.ReadAllTextAsync(bookingsFile.FullName);
+        var hotelsContent = await File.ReadAllTextAsync(hotelsFile.FullName);
+        var bookingsContent = await File.ReadAllTextAsync(bookingsFile.FullName);
 
         facade.AddBookingsAndHotelsToRepositories(hotelsContent, bookingsContent);
     }
@@ -80,14 +71,14 @@ internal static class Startup
         {
             var userQuery = Console.ReadLine();
 
-            if (userQuery == null)
+            switch (userQuery)
             {
-                Environment.Exit(0);
-            }
-
-            if (userQuery == "help")
-            {
-                Console.WriteLine($"Available commands: {string.Join(',', AvailableQueries.GetAvailableCommands())}");
+                case null:
+                    Environment.Exit(0);
+                    break;
+                case "help":
+                    Console.WriteLine($"Available commands: {string.Join(',', AvailableQueries.GetAvailableCommands())}");
+                    break;
             }
 
             if (userQuery.StartsWith(AvailableQueries.Availability))

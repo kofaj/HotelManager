@@ -13,17 +13,16 @@ public class SearchHandlerTests
     private readonly SearchQueryHandler _handler;
     private readonly Mock<IInMemoryRepository<Booking>> _bookingRepositoryMock;
     private readonly Mock<IInMemoryRepository<Hotel>> _hotelRepositoryMock;
-    private readonly Mock<IDateProvider> _dateProvider;
     private readonly RoomType RoomType = RoomType.DBL;
 
     public SearchHandlerTests()
     {
         _bookingRepositoryMock = new Mock<IInMemoryRepository<Booking>>();
         _hotelRepositoryMock = new Mock<IInMemoryRepository<Hotel>>();
-        _dateProvider = new Mock<IDateProvider>();
-        _dateProvider.Setup(x => x.Today).Returns(DateOnly.FromDateTime(DateTime.Now));
+        Mock<IDateProvider> dateProvider = new();
+        dateProvider.Setup(x => x.Today).Returns(DateOnly.FromDateTime(DateTime.Now));
 
-        _handler = new SearchQueryHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object, _dateProvider.Object);
+        _handler = new SearchQueryHandler(_hotelRepositoryMock.Object, _bookingRepositoryMock.Object, dateProvider.Object);
     }
 
     [Theory]

@@ -1,13 +1,17 @@
 ﻿using HotelManager.Shared.Query;
 using HotelManager.Shared.Extensions;
-using System.ComponentModel.DataAnnotations;
 
 namespace HotelManager.Shared.Factories;
 
-public class SearchQueryFactory
+public static class SearchQueryFactory
 {
     public static SearchQuery Create(string command)
     {
+        if(string.IsNullOrEmpty(command))
+        {
+            throw new ArgumentException("Command is empty");
+        }
+        
         var parts = command.Replace(" ", "").Split(',');
         if (parts.Length != 3)
         {

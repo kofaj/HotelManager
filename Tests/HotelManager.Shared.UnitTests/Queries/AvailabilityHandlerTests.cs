@@ -6,6 +6,7 @@ using HotelManager.Shared.Services;
 using HotelManager.Shared.UnitTests.Builders;
 using Moq;
 using System.ComponentModel.DataAnnotations;
+using HotelManager.Shared.Queries;
 
 namespace HotelManager.Shared.UnitTests.Commands;
 
@@ -86,7 +87,7 @@ public class AvailabilityHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        result.RoomCount.Should().Be(12);
+        result.RoomCount.Should().Be(2);
     }
 
     [Fact]
