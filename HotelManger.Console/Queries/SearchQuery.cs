@@ -32,6 +32,7 @@ internal static class SearchQuery
             }
         }
 
-        Console.WriteLine(sb.ToString().TrimEnd(',', ' '));
+        var message = sb.ToString();
+        Console.WriteLine(message[..^2]);
     }
 }

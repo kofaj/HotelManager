@@ -73,7 +73,9 @@ internal static class Startup
 
             switch (userQuery)
             {
+                case "":
                 case null:
+                    Console.WriteLine("Exiting...");
                     Environment.Exit(0);
                     break;
                 case "help":
