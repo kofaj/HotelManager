@@ -71,19 +71,17 @@ internal static class Startup
         {
             var userQuery = Console.ReadLine();
 
-            switch (userQuery)
+            if (string.IsNullOrEmpty(userQuery))
             {
-                case "":
-                case null:
-                    Console.WriteLine("Exiting...");
-                    Environment.Exit(0);
-                    break;
-                case "help":
-                    Console.WriteLine($"Available commands: {string.Join(',', AvailableQueries.GetAvailableCommands())}");
-                    break;
+                Console.WriteLine("Exiting...");
+                Environment.Exit(0);
             }
-
-            if (userQuery.StartsWith(AvailableQueries.Availability))
+            else if(userQuery == "help")
+            {
+                Console.WriteLine($"Available commands: {string.Join(',', AvailableQueries.GetAvailableCommands())}");
+                Console.WriteLine($"Example: {Environment.NewLine} Availability(H1, 20240901, SGL) {Environment.NewLine} Search(H1, 365, SGL)");
+            }
+            else if (userQuery.StartsWith(AvailableQueries.Availability))
             {
                 await AvailabilityQuery.RunQuery(userQuery, mediator);
             }
