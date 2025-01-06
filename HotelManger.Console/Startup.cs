@@ -15,7 +15,7 @@ internal static class Startup
 {
     internal static IHostBuilder CreateHostBuilder(string[] args) =>
            Host.CreateDefaultBuilder(args)
-               .ConfigureServices((context, services) =>
+               .ConfigureServices((_, services) =>
                {
                    services.AddLogging(configure => configure.AddConsole());
                    services.RegisterSharedServices();
@@ -56,7 +56,6 @@ internal static class Startup
             return;
         }
 
-        // In real-case scenarios I would add CT to the following calls
         var hotelsContent = await File.ReadAllTextAsync(hotelsFile.FullName);
         var bookingsContent = await File.ReadAllTextAsync(bookingsFile.FullName);
 
