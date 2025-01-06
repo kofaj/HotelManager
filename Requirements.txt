@@ -129,15 +129,6 @@ Means that in the next 35 days, there are 2 rooms of type “SGL” in hotel “
  and 1 room available in 2024/12/03
 -
 2024/12/10
- period.<span class="LineBreakBlob BlobObject DragDrop SCXW104841198 BCX4" style="-webkit-user-drag: none; margin: 0px; padding: 0px; -webkit-user-select: text; font-size: 12pt; line-height: 20.925px; font-family: WordVisiCarriageReturn_MSFontService, Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, sans-serif; 
-
-...
-
+ period
 
 --hotels hotels.json --bookings bookings.json
-
-
-Start
-14:10 => Creat a project and add simple logic (stop 14:30)
-14:40 => 15:15 1st step
-15:15 => implementing commnands
